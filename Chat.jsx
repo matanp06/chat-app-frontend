@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Easing ,Dimensions, Keyboard, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View,TouchableWithoutFeedback, Animated } from "react-native";
 import { server, user } from "./App";
 import Message from "./Message";
 import { connect, io } from "socket.io-client";
-const socket = io("http://10.0.0.89:4001",{
-    autoConnect: false
-});
 
 let chatId = null;
 let counter = 0;
 function Chat(props){
+    
 
-
+    const socket = useRef();
 
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [messages, setMessages] = useState([]);
@@ -31,8 +29,26 @@ function Chat(props){
     }
     
     async function init(){
+        
+        socket.current = io("http://10.0.0.89:4001",{
+            autoConnect: false
+        });
+
+        socket.current.connect();
+
         loadMessages();
-        socket.connect();
+        socket.current.on("connect",()=>{
+            socket.current.emit("joinChat",{
+                currentUser:user.username,
+                _chatId: chatId,
+                otherUser:props.otherUser
+            });
+        })
+
+        socket.current.on("chatMessage",(message)=>{
+            setMessage(message);
+        })
+        
     }
 
 
@@ -62,7 +78,7 @@ function Chat(props){
 
     function handleMessageSend(){
 
-        socket.emit("chatMessage",{
+        socket.current.emit("chatMessage",{
             username:user.username,
             toUser: props.otherUser,
             message:inputText,
@@ -81,20 +97,6 @@ function Chat(props){
 
         setInputText("");
     }
-
-    socket.on("connect",()=>{
-        socket.emit("joinChat",{
-            currentUser:user.username,
-            _chatId: chatId,
-            otherUser:props.otherUser
-        });
-    })
-
-    socket.on("chatMessage",(message)=>{
-        setMessage(message);
-        counter = counter+1;
-        alert(counter);
-    })
 
     Keyboard.addListener("keyboardWillShow",(e)=>{
         setKeyboardHeight(e["endCoordinates"]["height"])

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, StyleSheet, Text, Pressable,  } from "react-native";
 
 function Header(props){

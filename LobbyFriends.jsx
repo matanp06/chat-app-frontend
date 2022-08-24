@@ -34,7 +34,9 @@ function LobbyFriends(props){
 
     const [friends,setFriends] = useState(userFriends)
 
-    useEffect(async ()=>{
+    useEffect(init,[])
+
+    async function init(){
         if(!friendsFetched){
             try{
                 const friends = await getFriends();
@@ -45,8 +47,7 @@ function LobbyFriends(props){
                 alert("we had a problem please try again later");
             }
         }
-        
-    },[])
+    }
 
     // useEffect(async function(){
     //     if(!friendsFetched){ 
