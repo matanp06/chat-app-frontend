@@ -5,12 +5,10 @@ import Message from "./Message";
 import { connect, io } from "socket.io-client";
 
 let chatId = null;
-let counter = 0;
 function Chat(props){
     
 
     const socket = useRef();
-
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [messages, setMessages] = useState([]);
     const [inputText, setInputText] = useState("");

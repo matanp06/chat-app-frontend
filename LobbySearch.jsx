@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { View,StyleSheet,TextInput,Pressable,Text,ScrollView } from "react-native";
 import { server,user } from "./App";
-import ChatCard from "./ChatCard";
+import SearchUserCard from "./SearchUserCard";
 
 function LobbySearch(){
     const [chats, setChats] = useState([])
@@ -47,7 +47,7 @@ function LobbySearch(){
         </View>
         <ScrollView>
             {chats.map((chat,key) => {
-                return  <ChatCard 
+                return  <SearchUserCard 
                             key={key} 
                             username={chat.username} 
                             updateSearchList={updateSearchList}

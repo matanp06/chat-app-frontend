@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button, SafeAreaView, StyleSheet, Text, View,Keyboard } from 'react-native';
 import { AsyncStorageStatic } from 'react-native';
 import Header from './Header';

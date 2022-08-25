@@ -4,6 +4,7 @@ import LobbyFriends from "./LobbyFriends";
 import LobbyNavigator from "./LobbyNavigation";
 import LobbySearch from "./LobbySearch";
 import Chat from "./Chat"
+import LobbyChat from "./LobbyChat";
 
 function Lobby(props){
     
@@ -27,6 +28,7 @@ function Lobby(props){
     }
 
     return (<View style={{position:"relative",flex:1}} >
+        {mode === modes.Chats && <LobbyChat />}
         {mode === modes.Search && <LobbySearch />}
         {mode === modes.Friends && <LobbyFriends goChatting={handleGoChat} />}
         {mode === modes.OnChat && <Chat otherUser={currentChatWith} />}

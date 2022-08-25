@@ -1,38 +1,26 @@
-import React from "react";
-import { StyleSheet, View,Text, Pressable } from "react-native";
-import {server,user} from "./App";
-import {userFriends} from "./LobbyFriends";
+import react from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { user } from "./App";
 
-function ChatCard(props) {
-    
-    function handleAddFriends(){
-        fetch(server+"user/"+user.username,{
-            method:"patch",
-            headers:{
-                Accept:"application/json",
-                "Content-Type": "application/json"
-            },
-            body:JSON.stringify({
-                friend: props.username
-            })
-        }).then(res => res.json())
-        .then(json => {
-            if(json.type=="ERR"){
-                alert(json.message);
-            } else {
-                props.updateSearchList(props.username);
-                userFriends.push(json.userDetails);
-            }
-        })
+function ChatCard({chatId, username, lastMessage,isLast}){
+
+    function handleChatPress(){
+
+
 
     }
 
-    return (<View style={styles.card}>
-        <Text style={styles.cardText}>{props.username}</Text>
-        <Pressable style={styles.addButton} onPress={handleAddFriends}>
-            <Text>Add</Text>
+    return(
+        <Pressable style={[styles.container,isLast&&{borderBottomWidth:1}]}>
+            <View style={styles.textContainer}>
+                <Text style={[styles.bold,styles.text]}>{username}</Text>
+            </View>
+            <View style={styles.textContainer}>
+                <Text style={[styles.text,{fontStyle:"italic"}]}>{lastMessage.senderUserName === user.username ? "You" : username}:</Text>
+                <Text style={styles.text}> {lastMessage.message}</Text>    
+            </View>
         </Pressable>
-    </View>)
+    )
 
 }
 
@@ -40,27 +28,24 @@ function ChatCard(props) {
 export default ChatCard;
 
 const styles = StyleSheet.create({
-
-    card:{
-        marginHorizontal:20,
-        alignSelf:"stretch",
-        height:60,
+    container:{
+        flexDirection:"column",
+        paddingHorizontal:20,
+        paddingVertical:10,
+        width:"100%",
+        height:80,
         backgroundColor:"white",
-        flexDirection:"row",
+        borderTopWidth:1
+    }, 
+    textContainer:{
+        height:"50%",
+        flexDirection:"row"
     },
-    cardText:{
-        fontSize:25,
-        alignContent:"center",
-        width:"75%",
-        textAlign:"center",
-        alignSelf:"center"
+    text:{
+        fontSize:20
     },
-    addButton:{
-        width:"25%",
-        height:60,
-        backgroundColor:"lightblue",
-        justifyContent:"center",
-        alignItems:"center"
+    bold:{
+        fontWeight:"bold"
     }
 
 })
