@@ -1,17 +1,23 @@
-import react from "react";
+import react, { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { user } from "./App";
+import { goToChatContext } from "./Lobby";
+
 
 function ChatCard({chatId, username, lastMessage,isLast}){
+    const goToChat = useContext(goToChatContext);
 
     function handleChatPress(){
 
-
+        goToChat(username);
 
     }
 
     return(
-        <Pressable style={[styles.container,isLast&&{borderBottomWidth:1}]}>
+        <Pressable
+            onPress={handleChatPress}
+             style={[styles.container,isLast&&{borderBottomWidth:1}]}>
+
             <View style={styles.textContainer}>
                 <Text style={[styles.bold,styles.text]}>{username}</Text>
             </View>
@@ -19,6 +25,7 @@ function ChatCard({chatId, username, lastMessage,isLast}){
                 <Text style={[styles.text,{fontStyle:"italic"}]}>{lastMessage.senderUserName === user.username ? "You" : username}:</Text>
                 <Text style={styles.text}> {lastMessage.message}</Text>    
             </View>
+
         </Pressable>
     )
 
