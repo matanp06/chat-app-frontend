@@ -6,7 +6,9 @@ function Message(props){
 
     return (
         <View style={[styles.container,props.username === user.username && {alignSelf:"flex-end"}]}>
+            {/* message sender */}
              <Text style={[styles.name,styles.text]}>{props.username !== user.username ? props.username : "You"}</Text>
+             {/* message content */}
             <Text style={styles.text}>{props.content}</Text>
         </View>
     )
@@ -15,6 +17,7 @@ function Message(props){
 
 export default Message;
 
+// styles
 const styles = StyleSheet.create({
 
     container:{

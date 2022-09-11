@@ -16,13 +16,16 @@ const user = {
 export default function App() {
 
   const [currentScreen,setCurrentScreen] = useState("Login")
-  const [user,setUser] = useState({});
+  // const [user,setUser] = useState({}); 
+  
+  // Header backButton
   const [backButton,setBackButton] = useState({
     showBackButton:false,
     callback: null
   });
   const [customHeaderTitle, setCustomHeaderTitle] = useState(null)
 
+  //Updating the heading properties
   function handleHeaderUpdate(title, backButtonCallback){
 
     setBackButton({

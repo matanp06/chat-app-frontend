@@ -5,6 +5,7 @@ function Header(props){
 
     return  (
         <View style={styles.header}>
+            {/* show a back button, if the page have one */}
             {props.backButton.showBackButton && <Pressable 
                 style={styles.backButton}
                 onPress={()=>{
@@ -13,13 +14,15 @@ function Header(props){
                 }}
                 ><Text style={styles.backButtonText}>back</Text>
             </Pressable>}
-            <Text style={styles.text}>{props.customTitle !== null ? props.customTitle : "WhatsApp" }</Text>
+            {/* title of the header */}
+            <Text style={styles.text}>{props.customTitle !== null ? props.customTitle : "Chat App" }</Text>
         </View>)
 
 }
 
-export default Header
+export default Header;
 
+// styles
 const styles = StyleSheet.create({
     header:{
         height: 50 ,

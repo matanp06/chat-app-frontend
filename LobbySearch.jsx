@@ -4,17 +4,22 @@ import { server,user } from "./App";
 import SearchUserCard from "./SearchUserCard";
 
 function LobbySearch(){
+
+    //states
     const [chats, setChats] = useState([])
     const [searchText,setSearchText] = useState("") 
 
+    // updating removing a user from the search result list when adding the user as a friend
     function updateSearchList(username){
         setChats((oldChats) => {
             return (oldChats.filter((chat) => {return chat.username!=username}));
         })
     }
 
+    // searching for a user
     function handleChatSearch(){
 
+        //sending a get requeset to the server
         fetch(server+"user/"+searchText+"/"+user.username,{
             method:"GET",
             headers:{
@@ -22,7 +27,7 @@ function LobbySearch(){
                 "Content-Type": "application/json"
             },
         }).then(res => res.json())
-        .then(json => {
+        .then(json => { //updateing found users
             setChats(json);
         })
         .catch((err) => {
@@ -34,6 +39,7 @@ function LobbySearch(){
     }
 
     return (<View>        
+    {/* the search box */}
         <View style={styles.searchBox} >
             <TextInput 
                 style={styles.searchInput} 
@@ -41,10 +47,12 @@ function LobbySearch(){
                 onChangeText={value => {setSearchText(value)}}
                 value={searchText}
                 ></TextInput>
+                {/* search button */}
             <Pressable style={styles.button} onPress={handleChatSearch}>
                 <Text style={styles.buttonText}>Search</Text>
             </Pressable>
         </View>
+        {/* search result */}
         <ScrollView>
             {chats.map((chat,key) => {
                 return  <SearchUserCard 
@@ -59,6 +67,7 @@ function LobbySearch(){
 
 export default LobbySearch;
 
+// styles
 const styles = StyleSheet.create({
     searchBox:{
         marginHorizontal:10,

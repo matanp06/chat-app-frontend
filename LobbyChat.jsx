@@ -8,6 +8,7 @@ let userChats=[];
 async function getChats(){
 
     try{
+        // getting all the user's chat from the server
         const res = await fetch(server+user.username+"/chats",
         {
 
@@ -18,10 +19,13 @@ async function getChats(){
             }
 
         });
+
         const json = await res.json();
+
+        
         if(json.type === "ERR"){
             throw(json.message);
-        } else {
+        } else {// successfully got all the chats
             return json.chats;
         }
         
@@ -39,10 +43,12 @@ function LobbyChat(props){
     const [chats, setChats] = useState([])
     useEffect(init,[]);
 
+    // when the component is loaded
     async function init(){
 
         try{
             
+            //getting chats from the server
             const chats = await getChats();
             setChats([...chats]);
 
@@ -56,6 +62,7 @@ function LobbyChat(props){
 
     return(
         <ScrollView style={styles.container}>
+            {/* rendering all the chats as cards */}
             {chats.map(({username,chatId,lastMessage},key) => {
                 return <ChatCard 
                         username={username}

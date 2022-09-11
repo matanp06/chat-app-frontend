@@ -7,36 +7,52 @@ function Login(props){
     const [username, setUserName] = useState("");
     const [password, setPassword] = useState("");
 
-    function handleLogin(){
+    //Handle the login client proccess
+    async function handleLogin(){
+
+        //fields verification
         if(username==="")
             alert("username field can't left empty");
         else if (password==="")
             alert("password field can't left empty");
         else{
-            fetch(server+"login",{
-                method:"POST",
-                headers:{
-                    Accept:"application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            }).then( res => res.json() )
-            .then((resJson) => {
-                if(resJson.type === "ERR")
-                    alert(resJson.message);
-                else{
+            
+            try{
+
+                //Sending the credentials to the server and getting back response
+                const res = await fetch(server+"login",{
+                    method:"POST",
+                    headers:{
+                        Accept:"application/json",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+                //converting respone to json
+                const json = await res.json();
+
+                //checking if the validation proccess pass
+                if(json.type === "ERR"){
+                    throw({
+                        isKnown:true,
+                        message:json.message
+                    });
+                } else {
                     user.username = username;
                     user.password = password;
                     props.setScreen("Lobby");
                 }
-            })
-            .catch(err=>{console.log(err);
-                alert("we had a problem please try again")})
+
+            } catch (err){
+                if(err["isKnown"])
+                    alert(err.message);
+                else
+                    alert("we had a problem please try again");
+            }
         }
-        
     }
     
     return(
@@ -59,11 +75,13 @@ function Login(props){
                 <Pressable
                     onPress={handleLogin} 
                     style={[styles.button,styles.buttonBlack]}
-                    // disabled={(username!="")&&(password!="") ? false : true}
                     >
                     <Text style={[styles.buttonText,styles.buttonTextWhite]}>Login</Text>
                 </Pressable>
-                <Pressable onPress={()=>{props.setScreen("Register")}} style={[styles.button,styles.buttonWhite]}>
+                <Pressable 
+                    onPress={()=>{props.setScreen("Register")}} 
+                    style={[styles.button,styles.buttonWhite]}
+                    >
                     <Text style={[styles.buttonText]}>Register</Text>
                 </Pressable>
             </View>

@@ -7,6 +7,7 @@ import { goToChatContext } from "./Lobby";
 function ChatCard({chatId, username, lastMessage,isLast}){
     const goToChat = useContext(goToChatContext);
 
+    // When the chat is selected
     function handleChatPress(){
 
         goToChat(username);
@@ -18,9 +19,12 @@ function ChatCard({chatId, username, lastMessage,isLast}){
             onPress={handleChatPress}
              style={[styles.container,isLast&&{borderBottomWidth:1}]}>
 
+            {/* Presenting with who the user speaks */}
             <View style={styles.textContainer}>
                 <Text style={[styles.bold,styles.text]}>{username}</Text>
             </View>
+
+            {/* presenting the last message in the chat */}
             <View style={styles.textContainer}>
                 <Text style={[styles.text,{fontStyle:"italic"}]}>{lastMessage.senderUserName === user.username ? "You" : username}:</Text>
                 <Text style={styles.text}> {lastMessage.message}</Text>    
@@ -34,6 +38,7 @@ function ChatCard({chatId, username, lastMessage,isLast}){
 
 export default ChatCard;
 
+// styles
 const styles = StyleSheet.create({
     container:{
         flexDirection:"column",

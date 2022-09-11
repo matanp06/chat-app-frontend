@@ -1,21 +1,28 @@
 import React from "react";
 import { Pressable, StyleSheet ,Text ,View } from "react-native";
 
+//This is the navigation bar at the button of the screen
 function LobbyNavigator(props){
     
     return(<View style={styles.container}>
+
+        {/* Chats screen selector */}
         <Pressable 
             style={[styles.button,props.mode===props.modes.Chats&&{backgroundColor:"white"}]}
             onPress={()=>{
                 props.setMode(props.modes.Chats)}}>
             <Text style={styles.buttonText}>Chats</Text>
         </Pressable>
+
+        {/* Search screen selector */}
         <Pressable 
             style={[styles.button,props.mode===props.modes.Search&&{backgroundColor:"white"}]}
             onPress={()=>{
                 props.setMode(props.modes.Search)}}>
             <Text style={styles.buttonText}>Search users</Text>
         </Pressable>
+
+        {/* Friends screen selector */}
         <Pressable 
             style={[styles.button,props.mode===props.modes.Friends&&{backgroundColor:"white"}]}
             onPress={()=>{props.setMode(props.modes.Friends)}}>

@@ -8,17 +8,21 @@ function Register(props){
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     
+    // when register is pressed
     function handleRegister(){
 
+        // verifing that all the fields are filled
         if(username==="")
             alert("username field can't left empty");
         else if (password==="")
             alert("password field can't left empty");
         else if (confirmPassword==="")
             alert("you must confirm you'r password");
-        else if(password!==confirmPassword)
+        // making sure that the repeated password matches the original
+        else if(password!==confirmPassword) 
             alert("passwords aren't matching");
-        else{
+        else{ // all fields are OK, registerting a new user
+            // sending a post request to the server
             fetch(server+"user",{
                 method: 'POST',
                 headers: {
@@ -32,14 +36,20 @@ function Register(props){
             }).then((res)=>{
                 return res.json();
             }).then((jsonRes)=>{
+                // checking if the user registration succeeded
                 if(jsonRes.type === "ERR"){
                     alert(jsonRes.message);
                 } else {
+                    //setting the user details in the app
                     user.username = username;
                     user.password = password;
+
+                    // cleaning all input fields
                     setUserName("");
                     setPassword("");
                     setConfirmPassword("");
+
+                    //going to lobby screen
                     props.setScreen("Lobby");
                 }
             }).catch((err)=>{
@@ -52,12 +62,14 @@ function Register(props){
     return(
         <View>
             <Text style={styles.header}>Register</Text>
+            {/* username input */}
             <TextInput
                 style={styles.input} 
                 placeholder="Username" 
                 value={username}
                 onChangeText={(value)=>{setUserName(value)}}>
             </TextInput>
+            {/* password input */}
             <TextInput 
                 style={styles.input} 
                 placeholder="Password" 
@@ -65,6 +77,7 @@ function Register(props){
                 value={password}
                 onChangeText={(value)=>{setPassword(value)}}>
             </TextInput>
+            {/* repeat password input */}
             <TextInput 
                 style={styles.input} 
                 placeholder="Confirm password" 
@@ -72,10 +85,13 @@ function Register(props){
                 value={confirmPassword}
                 onChangeText={(value)=>{setConfirmPassword(value)}}>
             </TextInput>
+            {/* buttons container */}
             <View style={styles.buttonsContainer}>
+                {/* go to login screen button */}
                 <Pressable onPress={()=>{props.setScreen("Login")}} style={[styles.button,styles.buttonBlack]}>
                     <Text style={[styles.buttonText,styles.buttonTextWhite]}>Login</Text>
                 </Pressable>
+                {/* register button */}
                 <Pressable onPress={handleRegister} style={[styles.button,styles.buttonWhite]}>
                     <Text style={[styles.buttonText]}>Register</Text>
                 </Pressable>
@@ -87,6 +103,7 @@ function Register(props){
 
 export default Register
 
+// styles
 const styles = StyleSheet.create({
     header:{
         textAlign:"center",

@@ -69,8 +69,7 @@ function LobbyFriends(props){
                 return <FriendCard 
                             key={key} 
                             username={username} 
-                            isLast={key==friends.length-1}
-                            goChat={props.goChatting}/>
+                            isLast={key==friends.length-1}/>
             })}
         </ScrollView>
     </View>)

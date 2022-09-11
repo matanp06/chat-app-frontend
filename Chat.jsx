@@ -9,13 +9,17 @@ function Chat(props){
     
 
     const socket = useRef();
+
+    // states
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     const [messages, setMessages] = useState([]);
     const [inputText, setInputText] = useState("");
     const [message, setMessage] = useState(null);
+
     useEffect(init,[]);
     useEffect(updateMessges,message);
     
+    // updating the messages
     function updateMessges(){
 
         if(message!=null){
@@ -26,16 +30,20 @@ function Chat(props){
 
     }
     
+    // when the chat is first loaded
     async function init(){
         
+        // connenting to the web socket
         socket.current = io("http://10.0.0.89:4001",{
             autoConnect: false
         });
-
         socket.current.connect();
 
+        // loading all the former messages
         loadMessages();
+
         socket.current.on("connect",()=>{
+            //joining to the current chat room in the server
             socket.current.emit("joinChat",{
                 currentUser:user.username,
                 _chatId: chatId,
@@ -43,15 +51,18 @@ function Chat(props){
             });
         })
 
+        //message is received
         socket.current.on("chatMessage",(message)=>{
             setMessage(message);
         })
         
     }
 
-
+    // loading messages from the server
     async function loadMessages(){
+
         try{
+            //sending a get request
             const res =  await fetch(server+user.username+"/chat/"+props.otherUser,{
                 method:"GET",
                 headers:{
@@ -60,9 +71,12 @@ function Chat(props){
                 }
             });
             const json = await res.json();
+
+            // checking if the requset succeeded
             if(json.type === "ERR"){
                 throw(json.message);
             } else {
+                // extracting the chat _id and the messages
                 const {chat} = json;
                 chatId = chat._id;
                 setMessages(chat.messages);
@@ -74,8 +88,10 @@ function Chat(props){
         
     }
 
+    //when sending a message
     function handleMessageSend(){
 
+        // using the socket to send a message
         socket.current.emit("chatMessage",{
             username:user.username,
             toUser: props.otherUser,
@@ -83,12 +99,14 @@ function Chat(props){
             _chatId:chatId
         });
 
+        // converting the message to the proper format
         let message={
             senderUserName: user.username,
             message:inputText,
             date: new Date()
         }
 
+        // adding the brand new message to the message list
         setMessages(function(messages){
             return [...messages,message];
         });
@@ -96,10 +114,12 @@ function Chat(props){
         setInputText("");
     }
 
+    // changing the view when the keyboard is shown
     Keyboard.addListener("keyboardWillShow",(e)=>{
         setKeyboardHeight(e["endCoordinates"]["height"])
     })
 
+    // changing the view when the keyboard is hidden
     Keyboard.addListener("keyboardWillHide",(e)=>{
         setKeyboardHeight(0)
     })
@@ -109,14 +129,18 @@ function Chat(props){
            <View style={[styles.container,{backgroundColor:"white"},
            { marginBottom:keyboardHeight}]}
         >
+                {/* the messages view */}
                 <ScrollView
                     ref={ref => {this.scrollView = ref}}
                     onContentSizeChange={() => this.scrollView.scrollToEnd({animated: true})}
                 >
+                    {/* rendering messages */}
                     {
                         messages.length == 0 ? 
-                            [<Message username={user.username} content="sdfkl;sdfsdlfjk"/>,
-                            <Message username="testing" content="lorem ipsum"/>] :
+                            //representing a chat without messages 
+                            [<Message username={user.username} content="hello!"/>,
+                            <Message username={props.otherUser} content="hi, how are you doing?"/>] :
+                            //rendering the chat messages
                             messages.map((message,key) => 
                                 <Message 
                                     key={key} 
@@ -127,6 +151,8 @@ function Chat(props){
                     }
                     
                 </ScrollView>
+
+                {/* the input section */}
                 <View style={[styles.inputConatiner]}>
                     <TextInput value={inputText} 
                     onChangeText={(text)=>{setInputText(text)}}
@@ -145,6 +171,7 @@ function Chat(props){
 
 export default Chat;
 
+// styles
 const styles = StyleSheet.create({
 
     container:{

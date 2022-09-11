@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
+import { goToChatContext } from "./Lobby";
 
 function FriendCard(props){
+
+    const goToChat = useContext(goToChatContext)
 
     return (
         <Pressable 
             style={[styles.card,props.isLast&&{borderBottomWidth:1}]}
             onPress={()=>{
-                    props.goChat(props.username)
+                    goToChat(props.username);
                 }}>
             <Text style={styles.cardText}>{props.username}</Text>
         </Pressable>)

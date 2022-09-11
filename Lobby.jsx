@@ -34,7 +34,7 @@ function Lobby(props){
             <View style={{position:"relative",flex:1}} >
                 {mode === modes.Chats && <LobbyChat />}
                 {mode === modes.Search && <LobbySearch />}
-                {mode === modes.Friends && <LobbyFriends goChatting={handleGoChat} />}
+                {mode === modes.Friends && <LobbyFriends />}
                 {mode === modes.OnChat && <Chat otherUser={currentChatWith} />}
                 <LobbyNavigator mode={mode} modes={modes} setMode={setMode} />
             </View>

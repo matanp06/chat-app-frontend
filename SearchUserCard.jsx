@@ -5,7 +5,10 @@ import {userFriends} from "./LobbyFriends";
 
 function SearchUserCard(props) {
     
+    // when add friend button pressed
     function handleAddFriends(){
+
+        // sending a patch request to the server
         fetch(server+"user/"+user.username,{
             method:"patch",
             headers:{
@@ -17,9 +20,10 @@ function SearchUserCard(props) {
             })
         }).then(res => res.json())
         .then(json => {
+            //request failed
             if(json.type=="ERR"){
                 alert(json.message);
-            } else {
+            } else { //request succeeded
                 props.updateSearchList(props.username);
                 userFriends.push(json.userDetails);
             }
@@ -29,6 +33,7 @@ function SearchUserCard(props) {
 
     return (<View style={styles.card}>
         <Text style={styles.cardText}>{props.username}</Text>
+        {/* add friend button */}
         <Pressable style={styles.addButton} onPress={handleAddFriends}>
             <Text>Add</Text>
         </Pressable>
